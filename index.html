@@ -1,0 +1,29 @@
+<!-- 	
+  •	React = the library for creating components/elements
+	•	ReactDOM = the part that knows how to render React into the browser DOM
+	•	your script (App.js) = your code that uses those libraries
+
+So the flow is:
+	1.	browser downloads React
+	2.	browser downloads ReactDOM
+	3.	browser runs your app script
+	4.	your app script tells ReactDOM to render your React app into #root -->
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Padre Gino's</title>
+  </head>
+  <body>
+    <!-- If React fails to load 'Not rendered' will be rendered instead of your React app. -->
+    <div id="root">Not rendered</div>
+    <!-- Loading the React library directly from a CDN. The first one is for 
+     the React library and the second one is for running React in the browser VS
+     a native environment. -->
+    <script src="https://unpkg.com/react@18.3.1/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js"></script>
+    <script src="./src/App.js"></script>
+  </body>
+</html>
