@@ -1,3 +1,6 @@
+import React from "react";
+import { createRoot } from "react-dom/client";
+
 const Pizza = (props) => {
   // A parent div with two sibling elements
   return React.createElement("div", {}, [
@@ -38,5 +41,5 @@ const App = () => {
 // Select the HTML element where we want React to render,
 // create a React root for that container, and render App into it.
 const container = document.getElementById("root");
-const root = ReactDOM.createRoot(container);
+const root = createRoot(container);
 root.render(React.createElement(App));
