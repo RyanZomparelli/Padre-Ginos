@@ -6,9 +6,22 @@ const App = () => {
   return (
     <div>
       <h1>Padre Gino's - Order Now!</h1>
-      <Pizza name="Pepperoni" description="Pep, Cheese, N stuff" />
-      <Pizza name="Hawaiian" description="Ham, Pineapple, N stuff" />
-      <Pizza name="Meat Baby" description="All the meats N stuff" />
+      <Pizza
+        name="Pepperoni"
+        description="Pep, Cheese, N stuff"
+        // .webp developed by google. More efficient/better compression compared to JPEG or PNG.
+        image={"/public/pizzas/pepperoni.webp"}
+      />
+      <Pizza
+        name="Hawaiian"
+        description="Ham, Pineapple, N stuff"
+        image={"/public/pizzas/hawaiian.webp"}
+      />
+      <Pizza
+        name="Meat Baby"
+        description="All the meats N stuff"
+        image={"/public/pizzas/big_meat.webp"}
+      />
     </div>
   );
 };
