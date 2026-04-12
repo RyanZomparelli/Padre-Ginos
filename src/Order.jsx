@@ -1,5 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Pizza from "./Pizza";
+
+// It’s a reusable formatter for turning numbers into properly formatted U.S. currency strings.
+const intl = new Intl.NumberFormat("en-US", {
+  style: "currency",
+  currency: "USD",
+});
 
 // VS an arrow function or function expression, named functions show up in the
 // stack trace.
@@ -7,8 +13,39 @@ export default function Order() {
   // React useState Hook.  Never use hooks in loops or conditionals because when
   // React rerenders this component, it relies on the state being called in the
   // same order each time to accurately keep track of what changed and what didn't.
+  const [pizzaTypes, setPizzaTypes] = useState([]);
   const [pizzaType, setPizzaType] = useState("pepperoni");
   const [pizzaSize, setPizzaSize] = useState("M");
+  const [loading, setLoading] = useState(true);
+
+  // Derived State
+  // Derived state is a value that can be calculated from existing props or state,
+  // so it usually should be computed normally rather than stored as its own
+  // separate piece of React state.
+  let price, selectedPizza;
+
+  if (!loading) {
+    selectedPizza = pizzaTypes.find((pizza) => pizzaType === pizza.id);
+    price = intl.format(
+      selectedPizza.sizes ? selectedPizza.sizes[pizzaSize] : "",
+    );
+  }
+
+  // 'Side effect' (API call) function. If you just called this function below in the component
+  //  body, it would run every time the component rerendered. So put it in a useEffect hook!
+  async function fetchPizzaTypes() {
+    // The Vite proxy setup is what allows relative paths like /api/pizzas instead
+    // of a full backend URL during development.
+    const pizzaRes = await fetch("/api/pizzas");
+    const pizzaData = await pizzaRes.json();
+    setPizzaTypes(pizzaData);
+    setLoading(false);
+  }
+
+  // Dependency array, only run it once. Empty [].
+  useEffect(() => {
+    fetchPizzaTypes();
+  }, []);
 
   return (
     <div className="order">
@@ -19,13 +56,22 @@ export default function Order() {
             <label htmlFor="pizza-type">Pizza Type</label>
             <select
               name="pizza-type"
-              id="pizza-type"
+              // id="pizza-type"
               value={pizzaType}
               onChange={(e) => setPizzaType(e.target.value)}
             >
-              <option value="pepperoni">The Pepperoni Pizza</option>
-              <option value="hawaiian">The Hawaiian Pizza</option>
-              <option value="big_meat">The Big Meat Pizza</option>
+              {/* <option value="pepperoni">The Pepperoni Pizza</option>
+                  <option value="hawaiian">The Hawaiian Pizza</option>
+                  <option value="big_meat">The Big Meat Pizza</option>  
+                Use map func instead*/}
+              {pizzaTypes.map((pizza) => (
+                // When no unique key is provided, React will warn developers in
+                // the console and may inefficiently re-render components by tearing
+                // down and rebuilding them completely, which can impact performance.
+                <option key={pizza.id} value={pizza.id}>
+                  {pizza.name}
+                </option>
+              ))}
             </select>
           </div>
           <div>
@@ -34,7 +80,8 @@ export default function Order() {
                 The change event from the selected radio input bubbles up to this div,
                 so we can attach one onChange handler here instead of one on each input.
                 Calling setPizzaSize updates state and causes React to rerender. */}
-            <div onChange={(e) => setPizzaSize(e.target.value)}>
+            {/* <div onChange={(e) => setPizzaSize(e.target.value)}> */}
+            <div>
               <span>
                 <input
                   checked={pizzaSize === "S"}
@@ -42,7 +89,7 @@ export default function Order() {
                   name="pizza-size"
                   value="S"
                   id="pizza-s"
-                  // onChange={(e) => setPizzaSize(e.target.value)}
+                  onChange={(e) => setPizzaSize(e.target.value)}
                 />
                 <label htmlFor="pizza-s">Small</label>
               </span>
@@ -53,7 +100,7 @@ export default function Order() {
                   name="pizza-size"
                   value="M"
                   id="pizza-m"
-                  // onChange={(e) => setPizzaSize(e.target.value)}
+                  onChange={(e) => setPizzaSize(e.target.value)}
                   //  onChange={(e) => setPizzaSize('M')} - would also work.
                 />
                 <label htmlFor="pizza-m">Medium</label>
@@ -65,7 +112,7 @@ export default function Order() {
                   name="pizza-size"
                   value="L"
                   id="pizza-l"
-                  // onChange={(e) => setPizzaSize(e.target.value)}
+                  onChange={(e) => setPizzaSize(e.target.value)}
                 />
                 <label htmlFor="pizza-l">Large</label>
               </span>
@@ -73,14 +120,18 @@ export default function Order() {
           </div>
           <button type="submit">Add to Cart</button>
         </div>
-        <div className="order-pizza">
-          <Pizza
-            name="pepperoni"
-            description="another pep pizza"
-            image="/public/pizzas/pepperoni.webp"
-          />
-          <p>$20.45</p>
-        </div>
+        {loading ? (
+          <h3>LOADING …</h3>
+        ) : (
+          <div className="order-pizza">
+            <Pizza
+              name={selectedPizza.name}
+              description={selectedPizza.description}
+              image={selectedPizza.image}
+            />
+            <p>{price}</p>
+          </div>
+        )}
       </form>
     </div>
   );
