@@ -1,15 +1,20 @@
 import { useState, useEffect, useContext } from "react";
+import { createLazyFileRoute } from "@tanstack/react-router";
 // COMPONENTS
-import Pizza from "./Pizza";
-import Cart from "./Cart";
+import Pizza from "../Pizza";
+import Cart from "../Cart";
 // CONTEXTS
-import CartContext from "./contexts/CartContext";
+import CartContext from "../contexts/CartContext";
 // HELPERS
-import { intl } from "./utils/helpers";
+import { intl } from "../utils/helpers";
+
+export const Route = createLazyFileRoute("/order")({
+  component: Order,
+});
 
 // VS an arrow function or function expression, named functions show up in the
 // stack trace.
-export default function Order() {
+function Order() {
   // React useState Hook.  Never use hooks in loops or conditionals because when
   // React rerenders this component, it relies on the state being called in the
   // same order each time to accurately keep track of what changed and what didn't.

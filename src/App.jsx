@@ -1,24 +1,12 @@
-import { StrictMode, useState } from "react";
+import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-// COMPONENTS
-import Order from "./Order";
-import PizzaOfTheDay from "./pizzaOfTheDay";
-import Header from "./Header";
-// CONTEXTS
-import CartContext from "./contexts/CartContext";
+import { RouterProvider, createRouter } from "@tanstack/react-router";
+import { routeTree } from "./routeTree.gen";
 
-// A React functional component
+const router = createRouter({ routeTree });
+
 const App = () => {
-  const cartHook = useState([]);
-  return (
-    <CartContext.Provider value={cartHook}>
-      <div>
-        <Header />
-        <Order />
-        <PizzaOfTheDay />
-      </div>
-    </CartContext.Provider>
-  );
+  return <RouterProvider router={router} />;
 };
 
 // Select the HTML element where we want React to render,
