@@ -9,7 +9,6 @@ const Cart = ({ cart, checkout }) => {
     // while current.pizza.sizes[current.size] is the raw number.
     total += current.pizza.sizes[current.size];
   }
-  console.log(cart);
 
   return (
     <div className="cart">

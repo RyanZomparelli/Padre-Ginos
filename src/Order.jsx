@@ -1,7 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 // COMPONENTS
 import Pizza from "./Pizza";
 import Cart from "./Cart";
+// CONTEXTS
+import CartContext from "./contexts/CartContext";
 // HELPERS
 import { intl } from "./utils/helpers";
 
@@ -14,7 +16,7 @@ export default function Order() {
   const [pizzaTypes, setPizzaTypes] = useState([]);
   const [pizzaType, setPizzaType] = useState("pepperoni");
   const [pizzaSize, setPizzaSize] = useState("M");
-  const [cart, setCart] = useState([]);
+  const [cart, setCart] = useContext(CartContext);
   const [loading, setLoading] = useState(true);
 
   async function checkout() {
