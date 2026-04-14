@@ -1,10 +1,5 @@
 import usePizzaOfTheDay from "./hooks/usePizzaOfTheDay";
-
-// Note, this functionality is built in with the browser. No library needed.
-const intl = new Intl.NumberFormat("en-US", {
-  style: "currency",
-  currency: "USD",
-});
+import { intl } from "./utils/helpers";
 
 const PizzaOfTheDay = () => {
   const pizzaOfTheDay = usePizzaOfTheDay();
