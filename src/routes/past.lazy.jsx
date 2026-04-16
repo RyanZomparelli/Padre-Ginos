@@ -1,14 +1,35 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { createLazyFileRoute } from "@tanstack/react-router";
+// COMPONENTS
+import Modal from "../Modal";
+import ErrorBoundary from "../ErrorBoundary";
+// API
 import getPastOrders from "../api/getPastOrders";
 import getPastOrder from "../api/getPastOrder";
+// HELPERS
 import { intl } from "../utils/helpers";
-import Modal from "../Modal";
 
+// The router expects a component reference for this route.
+// We create a small wrapper component so the PastOrdersRoute can be rendered
+// inside an ErrorBoundary. If PastOrdersRoute throws, the boundary can catch it
+// and show fallback UI instead of crashing the whole page section.
 export const Route = createLazyFileRoute("/past")({
-  component: PastOrdersRoute,
+  component: ErrorBoundaryWrappedPastOrderRoute,
 });
+
+// We need a separate wrapper component because an ErrorBoundary only catches
+// errors in its child components. If we placed the boundary inside
+// PastOrdersRoute itself, it would not catch errors thrown by PastOrdersRoute
+// while it is rendering. Wrapping PastOrdersRoute from the outside lets the
+// boundary catch route-level render errors and show fallback UI.
+function ErrorBoundaryWrappedPastOrderRoute() {
+  return (
+    <ErrorBoundary>
+      <PastOrdersRoute />
+    </ErrorBoundary>
+  );
+}
 
 function PastOrdersRoute() {
   const [page, setPage] = useState(1);
