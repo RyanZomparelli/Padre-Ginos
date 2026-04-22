@@ -13,11 +13,13 @@ function ContactRoute() {
   // like isSuccess, isError, and pending/loading.
   const mutation = useMutation({
     // mutationFn is the function TanStack Query runs when mutate() is called.
-    mutationFn: function (e) {
-      e.preventDefault();
+    mutationFn: function (formData) {
+      // Form Actions make these two lines, e.preventDefault() and const formData etc...
+      // unnecessary.
+      // e.preventDefault();
       // FormData is a browser Web API that reads named form fields from the form element.
       // This is an uncontrolled form, so the DOM holds the input values until submit.
-      const formData = new FormData(e.target);
+      // const formData = new FormData(e.target);
 
       // Send the collected form values to the API helper.
       return postContact(
@@ -41,7 +43,8 @@ function ContactRoute() {
       ) : (
         // mutation.mutate triggers the mutationFn above and lets TanStack Query
         // manage the async request state for this submission.
-        <form onSubmit={mutation.mutate}>
+        // Changing onSubmit to action for React Form Actions.
+        <form action={mutation.mutate}>
           <input name="name" placeholder="Name" />
           <input name="email" placeholder="Email" type="email" />
           <textarea placeholder="Message" name="message"></textarea>
