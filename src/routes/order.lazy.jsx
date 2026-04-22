@@ -7,6 +7,7 @@ import Cart from "../Cart";
 import CartContext from "../contexts/CartContext";
 // HELPERS
 import { intl } from "../utils/helpers";
+import { apiUrl } from "../utils/apiConfig";
 
 export const Route = createLazyFileRoute("/order")({
   component: Order,
@@ -27,7 +28,7 @@ function Order() {
   async function checkout() {
     setLoading(true);
 
-    await fetch("/api/order", {
+    await fetch(`${apiUrl}/api/order`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -57,7 +58,7 @@ function Order() {
   async function fetchPizzaTypes() {
     // The Vite proxy setup is what allows relative paths like /api/pizzas instead
     // of a full backend URL during development.
-    const pizzaRes = await fetch("/api/pizzas");
+    const pizzaRes = await fetch(`${apiUrl}/api/pizzas`);
     const pizzaData = await pizzaRes.json();
     setPizzaTypes(pizzaData);
     setLoading(false);

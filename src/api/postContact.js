@@ -1,5 +1,7 @@
+import { apiUrl } from "../utils/apiConfig";
+
 export default async function postContact(name, email, message) {
-  const res = await fetch("/api/contact", {
+  const res = await fetch(`${apiUrl}/api/contact`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
